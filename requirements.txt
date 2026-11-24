@@ -1,0 +1,8 @@
+# The Streamlit app (app.py) — what Streamlit Community Cloud installs.
+streamlit>=1.67,<2
+altair>=5.4
+pandas>=2.2
+certifi>=2024.2.2
+# Optional standalone web edition (web_app.py).
+Flask>=3.0,<4
+gunicorn>=22.0
