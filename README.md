@@ -4,7 +4,7 @@ ShopImpact turns everyday shopping into a calm, eco-conscious habit. Log a purch
 
 Built with **Streamlit** for the WACP Year 1 Python Programming summative assessment (Scenario 1).
 
-> **Live app:** _add your Streamlit Community Cloud URL here_
+> **Live app:** [shopimpact-dashboard.streamlit.app](https://shopimpact-dashboard.streamlit.app)
 > **Screenshots:** _add images to `docs/screenshots/` and link them here_
 > **Design document:** [docs/design.md](docs/design.md) — users, feature plan, wireframes, palette, logic design
 > **Testing log:** [docs/testing.md](docs/testing.md) — 63 automated tests, 29 purchase scenarios, fixes and user feedback
