@@ -17,7 +17,7 @@ TOKENS = {
         "ink": "#1E3B2F", "ink-2": "#4B6155", "ink-3": "#5F7166",
         "line": "rgba(30, 59, 47, .13)", "line-strong": "rgba(30, 59, 47, .26)",
         "accent": "#2F6F8F", "accent-soft": "rgba(47, 111, 143, .12)",
-        "low": "#3F7D48", "medium": "#8F6510", "high": "#B04E34",
+        "low": "#356C3D", "medium": "#7E590D", "high": "#B04E34",
         "low-soft": "rgba(78, 138, 87, .14)", "medium-soft": "rgba(212, 162, 58, .18)", "high-soft": "rgba(181, 84, 58, .13)",
         "counter": "#1E3B2F", "counter-2": "#284A3B", "counter-ink": "#EEF2E6", "counter-ink-2": "#B4C8B9",
         "key": "#F7F6EF", "key-ink": "#1E3B2F", "key-edge": "#B9C4AE",

@@ -303,6 +303,24 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(csv_safe('=HYPERLINK("x")'), '\'=HYPERLINK("x")')
         self.assertEqual(csv_safe("Zara"), "Zara")
 
+    def test_backup_and_restore_round_trip(self):
+        from shopimpact.service import Service, ValidationError
+        from shopimpact.store import Store
+        with tempfile.TemporaryDirectory() as tmp:
+            service = Service(Store(os.path.join(tmp, "backup.db")))
+            service.update_settings("a" * 32, {"country": "IN"}, self.TODAY)
+            service.add("a" * 32, {"product_type": "fast_fashion", "price": 2000, "date": "2026-11-20",
+                                    "brand": "Zudio"}, self.TODAY)
+            backup = service.backup("a" * 32)
+            restored = service.restore_backup("b" * 32, backup, self.TODAY)
+            self.assertEqual(restored, 1)
+            original = service.store.purchases("a" * 32)[0]
+            copy = service.store.purchases("b" * 32)[0]
+            self.assertEqual((copy["brand"], copy["price"], copy["co2"]), (original["brand"], original["price"], original["co2"]))
+            self.assertEqual(service.store.settings("b" * 32)["currency"], "INR")
+            with self.assertRaises(ValidationError):
+                service.restore_backup("c" * 32, "not a backup", self.TODAY)
+
 
 class TurtleTests(unittest.TestCase):
     def test_square_path(self):

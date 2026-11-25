@@ -6,6 +6,8 @@ Built with **Streamlit** for the WACP Year 1 Python Programming summative assess
 
 > **Live app:** _add your Streamlit Community Cloud URL here_
 > **Screenshots:** _add images to `docs/screenshots/` and link them here_
+> **Design document:** [docs/design.md](docs/design.md) — users, feature plan, wireframes, palette, logic design
+> **Testing log:** [docs/testing.md](docs/testing.md) — 63 automated tests, 29 purchase scenarios, fixes and user feedback
 
 ---
 
@@ -93,8 +95,9 @@ shopimpact/
     runtime.js              browser side: sounds, turtle playback, receipt printer
     logo_cache.py           logos as data URIs
 tests/
-  test_engine.py            57 unit + API tests (maths, badges, validation, turtle)
+  test_engine.py            58 unit + API tests (maths, badges, validation, turtle, backup)
   test_streamlit_app.py     5 headless Streamlit AppTest tests (screens, ring-up flow)
+docs/                     design document, testing log, screenshots
 web_app.py, templates/, static/   optional standalone web edition (Flask), same Python logic
 ```
 

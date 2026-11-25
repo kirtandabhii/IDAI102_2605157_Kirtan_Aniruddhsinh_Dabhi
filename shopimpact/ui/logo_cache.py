@@ -50,7 +50,29 @@ def _scan_existing():
 _scan_existing()
 
 
+_TYPES_BY_EXT = {"png": "image/png", "ico": "image/x-icon", "svg": "image/svg+xml", "jpg": "image/jpeg",
+                 "gif": "image/gif", "webp": "image/webp", "avif": "image/avif"}
+
+
+def _from_disk(brand):
+    """A logo saved by an earlier run — no network needed."""
+    file_name = _files.get(brand["domain"])
+    if not file_name:
+        return None
+    try:
+        body = (STATIC_DIR / file_name).read_bytes()
+    except OSError:
+        return None
+    ctype = _TYPES_BY_EXT.get(file_name.rsplit(".", 1)[-1], "image/png")
+    return f"data:{ctype};base64,{base64.b64encode(body).decode()}"
+
+
 def _store(brand):
+    cached = _from_disk(brand)
+    if cached:
+        with _lock:
+            _uris[brand["domain"]] = cached
+        return cached
     body, ctype, _real = logos.get_logo(brand["domain"], brand["name"])
     ctype = ctype.split(";")[0].strip()
     uri = f"data:{ctype};base64,{base64.b64encode(body).decode()}"
