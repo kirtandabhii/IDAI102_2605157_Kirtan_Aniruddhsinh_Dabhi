@@ -5,7 +5,7 @@ ShopImpact turns everyday shopping into a calm, eco-conscious habit. Log a purch
 Built with **Streamlit** for the WACP Year 1 Python Programming summative assessment (Scenario 1).
 
 > **Live web app:** [shopimpact-kirtandabhi.streamlit.app](https://shopimpact-kirtandabhi.streamlit.app)<br>
-> **Repository:** [github.com/kirtandabhii/IDAI102-KirtanDabhi](https://github.com/kirtandabhii/IDAI102-KirtanDabhi)<br>
+> **Repository:** [github.com/kirtandabhii/IDAI102_2605157_Kirtan_Aniruddhsinh_Dabhi](https://github.com/kirtandabhii/IDAI102_2605157_Kirtan_Aniruddhsinh_Dabhi)<br>
 > **Screenshots:** [below](#screenshots) · full size in [docs/screenshots/](docs/screenshots)<br>
 > **Design document:** [docs/design.md](docs/design.md) — users, feature plan, wireframes, palette, logic design<br>
 > **Testing log:** [docs/testing.md](docs/testing.md) — 63 automated tests, 29 purchase scenarios, fixes and user feedback
