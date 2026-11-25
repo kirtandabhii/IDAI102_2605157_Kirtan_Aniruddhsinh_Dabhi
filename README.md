@@ -4,14 +4,34 @@ ShopImpact turns everyday shopping into a calm, eco-conscious habit. Log a purch
 
 Built with **Streamlit** for the WACP Year 1 Python Programming summative assessment (Scenario 1).
 
-> **Live app:** [shopimpact-dashboard.streamlit.app](https://shopimpact-dashboard.streamlit.app)
-> **Screenshots:** _add images to `docs/screenshots/` and link them here_
-> **Design document:** [docs/design.md](docs/design.md) — users, feature plan, wireframes, palette, logic design
+> **Live web app:** [shopimpact-kirtandabhi.streamlit.app](https://shopimpact-kirtandabhi.streamlit.app)<br>
+> **Repository:** [github.com/kirtandabhii/IDAI102-KirtanDabhi](https://github.com/kirtandabhii/IDAI102-KirtanDabhi)<br>
+> **Screenshots:** [below](#screenshots) · full size in [docs/screenshots/](docs/screenshots)<br>
+> **Design document:** [docs/design.md](docs/design.md) — users, feature plan, wireframes, palette, logic design<br>
 > **Testing log:** [docs/testing.md](docs/testing.md) — 63 automated tests, 29 purchase scenarios, fixes and user feedback
+
+![ShopImpact overview: the till, monthly dashboard and printed receipt](docs/screenshots/01-overview.png)
 
 ---
 
-## What it does
+## Screenshots
+
+| | |
+| --- | --- |
+| ![Live CO₂ estimate with a greener swap](docs/screenshots/02-live-estimate.png) | ![Ledger with impact tiers and swaps](docs/screenshots/03-ledger.png) |
+| **Real-time CO₂ estimate.** A £40 fast-fashion buy shows 36 kg CO₂e, a *high impact* tier and a one-click greener swap (second-hand saves 91%). | **Ledger.** Every purchase with its brand logo, frozen CO₂, impact tier and a swap button. Search, filter, sort, undo and CSV export. |
+| ![Greener swaps and what-if simulator](docs/screenshots/04-swaps.png) | ![Badges](docs/screenshots/05-badges.png) |
+| **Greener swaps.** The what-if slider recalculates the month in Python; the biggest wins and 100+ greener brands sit beside it. | **Badges.** Ten fair, clearly explained badges with progress bars. Month-long badges show *on track* until the month ends. |
+| ![Turtle-drawn badge rosette](docs/screenshots/10-badge-drawn.png) | ![Garden: recursive turtle tree](docs/screenshots/06-garden.png) |
+| **Turtle graphics.** "Watch it drawn" replays the Python turtle drawing each badge rosette stroke by stroke. | **Garden.** A recursive turtle tree grows with the month: green, golden and fallen leaves for low, medium and high-impact buys. |
+| ![Settings](docs/screenshots/07-settings.png) | ![Night canopy theme](docs/screenshots/08-night.png) |
+| **Settings.** Country and currency (235 countries), monthly budgets, themes, sounds, backup and restore. | **Night canopy theme.** Also available: Daylight and High contrast. |
+
+<p align="center"><img src="docs/screenshots/09-mobile.png" alt="ShopImpact on a phone" width="300"><br><em>On a phone: the side rail becomes a bottom tab bar.</em></p>
+
+---
+
+## Project overview
 
 | Brief requirement | Where it lives in ShopImpact |
 | --- | --- |
@@ -109,7 +129,28 @@ web_app.py, templates/, static/   optional standalone web edition (Flask), same 
 - **Badges**: a `list` of dicts, each holding a `rule` function. `evaluate_badges()` runs every rule against a `BadgeContext`.
 - **Monthly summary**: `engine.monthly_summary()` groups by tier and product group, builds a cumulative daily series, finds the biggest swaps, computes the what-if table and projects the month-end total.
 
-### Turtle graphics — integration details
+---
+
+## Integration details
+
+How the pieces fit together:
+
+```
+Browser ──(Streamlit widgets)──> app.py ──> shopimpact/ui/views.py ──> shopimpact/service.py
+                                                                         ├─ engine.py   (CO₂ maths)
+                                                                         ├─ badges.py   (badge rules)
+                                                                         ├─ drawings.py (turtle art)
+                                                                         └─ store.py    (SQLite)
+```
+
+- **Streamlit ↔ Python logic.** Every widget change reruns `app.py`. The screens in `ui/views.py` only read and display. All rules (validation, CO₂, budgets, badges) live in `service.py`, which is plain Python and fully unit-tested without Streamlit.
+- **Calculations.** `engine.py` holds pure functions (`calculate_impact`, `eco_score`, `monthly_summary`, `swap_details`) that work on lists of dicts. The what-if slider and the dashboard both call these, so the browser never does its own maths.
+- **Brand logos.** `logos.py` fetches each brand's icon once and `ui/logo_cache.py` saves it to `static/logos/`. Streamlit's static file serving (`server.enableStaticServing` in `.streamlit/config.toml`) then shows the logos inside the brand dropdown. A monogram is used when a logo can't be fetched.
+- **Exchange rates.** `rates.py` refreshes rates once a day from ExchangeRate-API in the background. Built-in rates in `world.py` are the fallback, and each purchase keeps the rate it was logged with.
+- **Storage.** `store.py` keeps purchases, settings, month budgets and awarded badges in SQLite, keyed by an anonymous id in the page link (`?id=…`).
+- **Sound and motion.** `ui/runtime.js` adds the till chimes, price-tag ticks, receipt printer and turtle playback with the Web Audio API and CSS animation. It's loaded through `st.html`, and Python passes it only display data.
+
+### Turtle graphics
 
 Python's `turtle` module draws into a Tk window, which doesn't exist on a web server (or on Streamlit Cloud). `shopimpact/turtle_svg.py` re-implements the turtle API (`forward`, `left`, `circle`, `begin_fill`, `dot`, `goto`, …) and **records every move in order**. The page then replays those strokes one by one while a small turtle walks the path.
 
@@ -140,12 +181,16 @@ python -m unittest discover tests
 
 ---
 
-## Deploy to Streamlit Community Cloud
+## Deployment instructions
 
-1. Push this folder to a GitHub repository named as the brief requires, e.g. `IDAI102<StudentID>-<StudentName>`. `app.py` and `requirements.txt` sit at the top level.
-2. Go to [share.streamlit.io](https://share.streamlit.io) → **Create app** → *Deploy a public app from GitHub*.
-3. Pick the repository and branch, set **Main file path** to `app.py`, and under *Advanced settings* choose **Python 3.12**.
-4. Click **Deploy**, then paste the live URL at the top of this README.
+The live app runs on Streamlit Community Cloud from this repository's `main` branch: **[shopimpact-kirtandabhi.streamlit.app](https://shopimpact-kirtandabhi.streamlit.app)**.
+
+To deploy your own copy:
+
+1. Fork or push this repository to GitHub. `app.py` and `requirements.txt` sit at the top level.
+2. Go to [share.streamlit.io](https://share.streamlit.io), sign in with GitHub, then **Create app** → *Deploy a public app from GitHub*.
+3. Pick the repository and the `main` branch, set **Main file path** to `app.py`, and under *Advanced settings* choose **Python 3.12**.
+4. Click **Deploy**. The first build takes about two minutes. Every push to `main` redeploys automatically.
 
 **Your data on Streamlit Cloud:** each visitor gets a private link (`?id=…`) that the browser also remembers. Purchases are stored in SQLite on the app's disk, which Streamlit Cloud may reset when the app restarts or redeploys. Use **Settings → Download a full backup** to keep a copy, and **Restore from a backup** to bring it back.
 
